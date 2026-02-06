@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ᯓ͢𝐀𝐋𝐒𝐀6𝐈 ֶָ֢֪ VIP - Official</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* === إعدادات الألوان === */
+        :root {
+            --primary-purple: #7b00ff; 
+            --neon-glow: #d000ff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            outline: none;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            background-color: #0d001a; 
+            /* تأكد من وجود صورة background.jpg */
+            background-image: url('background.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            position: relative;
+        }
+
+        /* طبقة تعتيم خفيفة لضمان وضوح النصوص */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 0, 20, 0.4); /* شفافية خفيفة */
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* === شاشة البداية === */
+        #click-to-start {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99999;
+            background: url('cover.png') no-repeat center center; 
+            background-size: cover;
+            display: flex; justify-content: center; align-items: center; cursor: pointer;
+        }
+        
+        .click-msg {
+            font-size: 1.1rem; animation: pulse 1.5s infinite; color: #fff;
+            border: 2px solid var(--neon-glow);
+            padding: 15px 40px; 
+            background: rgba(0, 0, 0, 0.7);
+            box-shadow: 0 0 30px var(--primary-purple);
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+
+        /* === شاشة التحميل === */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 50000;
+            background: #0d001a;
+            display: none; flex-direction: column;
+            justify-content: center; align-items: center; transition: opacity 0.5s ease-out;
+        }
+
+        .glass-loader-bar {
+            position: relative; width: 250px; height: 50px;
+            background: transparent; 
+            border: 2px solid var(--neon-glow);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 20px;
+            box-shadow: 0 0 20px rgba(123, 0, 255, 0.4);
+        }
+        .loader-text-content { font-size: 0.9rem; color: #fff; font-weight: 700; }
+        .loader-icon { color: var(--neon-glow); font-size: 1.2rem; animation: spin 2s linear infinite; }
+
+        /* === الحاويات الرئيسية === */
+        #intro-screen, #main-content {
+            position: absolute; 
+            top: 0; left: 0;
+            width: 100%; height: 100%; 
+            display: none; /* يتم التحكم بها عبر JS */
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center;
+            z-index: 10; /* تأكدنا أن الطبقة أعلى من الخلفية */
+            transition: all 0.8s ease-in-out;
+        }
+        
+        /* إصلاح المشكلة: التأكد من أن المحتوى يأخذ مكانه الصحيح */
+        #main-content { 
+            opacity: 0; 
+            transform: scale(0.95); 
+            padding: 20px;
+        }
+
+        /* كلاسات الحركة */
+        .show-content {
+            opacity: 1 !important;
+            transform: scale(1) !important;
+            display: flex !important;
+        }
+
+        .hide-content {
+            opacity: 0 !important;
+            transform: scale(1.1) !important;
+            pointer-events: none;
+        }
+
+        /* === البروفايل === */
+        .profile-container {
+            position: relative; width: 220px; height: 220px;
+            display: flex; justify-content: center; align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-img {
+            position: absolute; width: 100px; height: 100px;
+            border-radius: 50%; 
+            border: 3px solid var(--neon-glow);
+            box-shadow: 0 0 40px var(--primary-purple);
+            z-index: 2; background: #000;
+            overflow: hidden;
+        }
+        .profile-img img { width: 100%; height: 100%; object-fit: cover; }
+
+        .rotating-text-wrapper {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            animation: rotateText 20s linear infinite; z-index: 1;
+        }
+        .rotating-text-wrapper svg { width: 100%; height: 100%; overflow: visible; }
+        .rotating-text-wrapper text {
+            font-family: sans-serif; font-weight: 900; font-size: 14px; letter-spacing: 3px;
+            fill: #fff; text-shadow: 0 0 10px var(--neon-glow);
+        }
+
+        .title-text { 
+            font-size: 2rem; font-weight: 900; margin-bottom: 5px; 
+            color: #fff; text-shadow: 0 0 20px var(--neon-glow);
+            text-align: center;
+        }
+        .subtitle-text { font-size: 0.9rem; color: #ccc; margin-bottom: 30px; text-shadow: 0 0 5px #000; text-align: center;}
+
+        /* === الأزرار (تعديل: شفافة وبدون لون داخلي) === */
+        .buttons-list { 
+            width: 100%; max-width: 400px;
+            display: flex; flex-direction: column; 
+            gap: 15px; align-items: center; 
+        }
+
+        .lightning-btn, .start-btn, .back-btn {
+            position: relative; 
+            display: flex; justify-content: center; align-items: center;
+            text-decoration: none; color: white; font-weight: 800; 
+            
+            /* === التعديل المطلوب: خلفية شفافة === */
+            background: transparent; 
+            
+            border-radius: 0px; /* مربع */
+            transition: all 0.3s; 
+            
+            /* حدود مضيئة فقط */
+            border: 2px solid var(--neon-glow);
+            box-shadow: 0 0 10px rgba(123, 0, 255, 0.2); 
+        }
+
+        .lightning-btn { width: 100%; height: 55px; font-size: 1.1rem; }
+        .start-btn { width: 200px; height: 55px; font-size: 1.2rem; margin-top: 20px; cursor: pointer; background: rgba(0,0,0,0.3); }
+        
+        .back-btn { 
+            width: 120px; height: 45px; font-size: 0.9rem; margin-top: 30px; 
+            border: 1px solid #fff; opacity: 0.7;
+        }
+
+        /* تأثير عند اللمس */
+        .lightning-btn:active, .start-btn:active { 
+            transform: scale(0.95); 
+            background: rgba(208, 0, 255, 0.1); /* لون خفيف جداً عند الضغط */
+        }
+
+        /* الأيقونات */
+        .silver-icon {
+            margin-left: 15px; font-size: 1.3rem; color: #fff;
+            filter: drop-shadow(0 0 5px var(--neon-glow));
+        }
+        
+        .btn-text { z-index: 2; text-shadow: 0 0 10px #000; }
+
+        /* أدوات التحكم */
+        #music-control {
+            position: fixed; bottom: 20px; right: 20px; z-index: 200;
+            width: 45px; height: 45px; border-radius: 0px;
+            background: transparent; border: 2px solid var(--neon-glow);
+            display: none; justify-content: center; align-items: center; cursor: pointer;
+            color: #fff;
+        }
+        .playing { box-shadow: 0 0 20px var(--neon-glow); background: rgba(208, 0, 255, 0.2) !important; }
+
+        .designer-link {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.5); font-size: 0.7rem; text-decoration: none; z-index: 200;
+            padding: 5px 15px; border: 1px solid rgba(255,255,255,0.2); background: rgba(0,0,0,0.5);
+            white-space: nowrap;
+        }
+
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 15px var(--primary-purple); } 50% { box-shadow: 0 0 30px var(--neon-glow); } }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes rotateText { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop><source src="music.mp3" type="audio/mpeg"></audio>
+    <audio id="click-sound"><source src="click.mp3" type="audio/mpeg"></audio>
+
+    <!-- شاشة البداية -->
+    <div id="click-to-start" onclick="startSystem()">
+        <div class="click-msg">اضغط لدخول الموقع</div>
+    </div>
+
+    <!-- شاشة التحميل -->
+    <div id="preloader">
+        <div class="glass-loader-bar">
+            <span class="loader-text-content">LOADING SYSTEM...</span>
+            <i class="fas fa-microchip loader-icon"></i> 
+        </div>
+    </div>
+
+    <!-- زر الموسيقى -->
+    <div id="music-control" onclick="toggleMusic(); playClickSound();">
+        <i class="fas fa-volume-up"></i>
+    </div>
+
+    <a href="https://t.me/O_I_I3" target="_blank" class="designer-link">اضغط هنا لتصميم موقعك</a>
+
+    <!-- === صفحة المقدمة (زر الدخول) === -->
+    <div id="intro-screen">
+        <div class="profile-container">
+            <div class="rotating-text-wrapper">
+                <svg viewBox="0 0 300 300">
+                    <defs><path id="circlePath" d="M 150, 150 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0" /></defs>
+                    <text><textPath xlink:href="#circlePath" href="#circlePath">RICK • MAS • COT • DAMAR • VIP • RICK •</textPath></text>
+                </svg>
+            </div>
+            <div class="profile-img"><img src="profile.png" alt="Logo"></div>
+        </div>
+        <h1 style="margin-bottom: 20px; font-size: 2.5rem; text-shadow: 0 0 30px var(--neon-glow); color: #fff;">RICK VIP</h1>
+        <button class="start-btn" onclick="transitionToMain(); playClickSound();">
+            <span class="btn-text">دخول الموقع</span>
+        </button>
+    </div>
+
+    <!-- === الصفحة الرئيسية (الأزرار) === -->
+    <div id="main-content">
+        <div class="profile-container" style="width: 180px; height: 180px;">
+            <div class="rotating-text-wrapper">
+                <svg viewBox="0 0 300 300">
+                    <path id="circlePathMain" d="M 150, 150 m -100, 0 a 100,100 0 1,1 200,0 a 100,100 0 1,1 -200,0" fill="none"/>
+                    <text><textPath xlink:href="#circlePathMain" href="#circlePathMain">RICK • MAS • COT • DAMAR • VIP • RICK •</textPath></text>
+                </svg>
+            </div>
+            <div class="profile-img" style="width: 90px; height: 90px;"><img src="profile.png" alt="Profile"></div>
+        </div>
+        
+        <h1 class="title-text">RICK | ريك</h1>
+        <p class="subtitle-text">موقعي الخاص احباب قلبي</p>
+
+        <div class="buttons-list">
+            <a href="https://t.me/G52_5l" target="_blank" class="lightning-btn" onclick="playClickSound()">
+                <i class="fas fa-bullhorn silver-icon"></i> <span class="btn-text">قناة DAMAR +</span>
+            </a>
+
+            <a href="https://t.me/FGI_l" target="_blank" class="lightning-btn" onclick="playClickSound()">
+                <i class="fas fa-users silver-icon"></i> <span class="btn-text">جروب COT +</span>
+            </a>
+
+            <a href="https://t.me/bobo_8bot" target="_blank" class="lightning-btn" onclick="playClickSound()">
+                <i class="fas fa-robot silver-icon"></i> <span class="btn-text">بوت MAS +</span>
+            </a>
+
+            <a href="https://t.me/TY_7B" class="lightning-btn" onclick="playClickSound()">
+                <i class="fas fa-check-circle silver-icon"></i> <span class="btn-text">ᯓ͢𝐀𝐋𝐒𝐀6𝐈 ֶָ֢֪ +</span>
+            </a>
+        </div>
+
+        <a href="#" class="back-btn" onclick="location.reload(); playClickSound()">
+            <span class="btn-text">رجوع</span>
+        </a>
+    </div>
+
+    <script>
+        const clickToStart = document.getElementById('click-to-start');
+        const preloader = document.getElementById('preloader');
+        const intro = document.getElementById('intro-screen');
+        const main = document.getElementById('main-content');
+        const musicControl = document.getElementById('music-control');
+        const music = document.getElementById('bg-music');
+        const clickSound = document.getElementById('click-sound');
+
+        function startSystem() {
+            // إخفاء شاشة اللمس
+            clickToStart.style.display = 'none';
+            // إظهار اللودر
+            preloader.style.display = 'flex';
+            
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => { 
+                    preloader.style.display = 'none'; 
+                    // إظهار شاشة الدخول الأولى
+                    intro.classList.add('show-content');
+                }, 500);
+            }, 2000); 
+        }
+
+        function transitionToMain() {
+            // تشغيل الموسيقى
+            music.volume = 0.5; 
+            music.play().catch(e => console.log("Audio play blocked"));
+            musicControl.style.display = 'flex'; musicControl.classList.add('playing');
+
+            // إخفاء صفحة الدخول
+            intro.classList.remove('show-content');
+            intro.classList.add('hide-content');
+
+            // إظهار الصفحة الرئيسية بعد تأخير بسيط
+            setTimeout(() => {
+                intro.style.display = 'none'; // إزالة نهائية
+                main.classList.add('show-content'); // إظهار المحتوى الرئيسي
+            }, 600);
+        }
+
+        function playClickSound() { 
+            clickSound.currentTime = 0; 
+            clickSound.play().catch(e => {}); 
+        }
+
+        function toggleMusic() {
+            if (music.paused) { music.play(); musicControl.innerHTML = '<i class="fas fa-volume-up"></i>'; musicControl.classList.add('playing'); }
+            else { music.pause(); musicControl.innerHTML = '<i class="fas fa-volume-mute"></i>'; musicControl.classList.remove('playing'); }
+        }
+    </script>
+</body>
+</html>
